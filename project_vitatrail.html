@@ -33,7 +33,7 @@ tailwind.config = {
   #prog{position:fixed;top:0;left:0;height:2px;background:#FF4D1C;z-index:300;transition:width .1s linear;}
 
   /* nav */
-  .nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:1.1rem 3rem;background:rgba(255,255,255,0.82);backdrop-filter:blur(18px);border-bottom:1px solid rgba(17,17,16,0.08);}
+  .nav-bar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:1.1rem 3rem;background:rgba(255,255,255,0.88);backdrop-filter:blur(18px);border-bottom:1px solid rgba(17,17,16,0.08);}
 
   /* hero overlay */
   .hero-overlay{background:linear-gradient(to bottom,rgba(0,0,0,0.1) 0%,rgba(0,0,0,0.05) 30%,rgba(0,0,0,0.5) 72%,rgba(0,0,0,0.82) 100%);}
@@ -75,8 +75,8 @@ tailwind.config = {
 <div id="prog"></div>
 
 <!-- NAV -->
-<nav class="nav">
-  <a href="https://scandi-fang.github.io/scandi-personal-website/fangqian_landing_v10.html" class="font-mono text-[9px] tracking-[.18em] uppercase text-ink2 hover:text-signal transition-colors">← Scandi · Portfolio</a>
+<nav class="nav-bar">
+  <a href="fangqian_landing_v10.html" class="font-mono text-[9px] tracking-[.18em] uppercase text-ink2 hover:text-signal transition-colors">← Scandi · Portfolio</a>
   <span class="font-mono text-[9px] tracking-[.16em] uppercase text-ink3">PRJ_01 · 工程美学 · 2025</span>
 </nav>
 
@@ -470,14 +470,11 @@ tailwind.config = {
 <!-- ═══ FOOTER NAV ═══ -->
 <footer class="bg-ink px-8 md:px-16 py-12">
   <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
-    <a href="https://scandi-fang.github.io/scandi-personal-website/fangqian_landing_v10.html" class="group flex items-center gap-3 font-mono text-[9px] tracking-[.18em] uppercase text-white/40 hover:text-white transition-colors">
-      <span class="inline-block transition-transform group-hover:-translate-x-1">←</span>
-      Back to Home
+    <a href="fangqian_landing_v10.html" class="group flex items-center gap-3 font-mono text-[9px] tracking-[.18em] uppercase text-white/40 hover:text-white transition-colors">
+      <span class="inline-block transition-transform group-hover:-translate-x-1">←</span>Back to Home
     </a>
-    <div class="hidden md:block text-center">
-      <p class="font-display text-[26px] leading-none text-white/15">VitaTrail</p>
-    </div>
-    <a href="https://scandi-fang.github.io/scandi-personal-website/project_blindirector.html" class="group flex items-center gap-3 font-mono text-[9px] tracking-[.18em] uppercase text-white/40 hover:text-white transition-colors">
+    <p class="font-display text-[26px] leading-none text-white/15">VitaTrail</p>
+    <a href="project_blindirector.html" class="group flex items-center gap-3 font-mono text-[9px] tracking-[.18em] uppercase text-white/40 hover:text-white transition-colors">
       <div class="text-right">
         <span class="block text-white/25 text-[8px] mb-0.5 tracking-widest uppercase">Next Project</span>
         <span class="block text-white/70 group-hover:text-white transition-colors">BlinDirector →</span>
@@ -489,13 +486,13 @@ tailwind.config = {
     <p class="font-mono text-[8px] tracking-[.16em] uppercase text-white/20">© 2025 方祈安 · Scandi Portfolio</p>
     <div class="flex items-center gap-6">
       <a href="https://drive.google.com/file/d/1mxPhvHYCUToW3QJpZCE8REM0_lNwK464/view?usp=drive_link" target="_blank" rel="noopener" class="font-mono text-[8px] tracking-widest uppercase text-white/50 hover:text-white transition-colors border-b border-white/20 hover:border-white pb-px">Full Portfolio PDF →</a>
-      <a class="footer-email" href="mailto:scandifang@163.com">scandifang@163.com</a>
+      <a href="mailto:scandifang@163.com" class="font-mono text-[8px] tracking-widest uppercase text-signal/60 hover:text-signal transition-colors">scandifang@163.com</a>
     </div>
   </div>
 </footer>
 
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Progress bar
 window.addEventListener('scroll', () => {
   const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
@@ -509,4 +506,3 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 </script>
 </body>
 </html>
-a href="project1.html"></a>

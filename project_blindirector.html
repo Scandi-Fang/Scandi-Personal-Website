@@ -553,18 +553,16 @@ tailwind.config = {
   </div>
 </footer>
 
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 // Progress bar
 window.addEventListener('scroll', () => {
   const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
   document.getElementById('prog').style.width = pct + '%';
 });
-
 // Scroll reveal
 const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); }});
-}, { threshold: 0.08 });
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
 // Cost pie chart
@@ -584,3 +582,17 @@ window.addEventListener('load', () => {
     },
     options: {
       cutout: '62%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => ` ¥${ctx.raw} (${Math.round(ctx.raw/11.2)}%)`
+          }
+        }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>

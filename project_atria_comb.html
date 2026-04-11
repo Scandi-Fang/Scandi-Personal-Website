@@ -382,19 +382,24 @@ tailwind.config = {
   <div class="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
     <p class="font-mono text-[8px] tracking-[.16em] uppercase text-white/20">© 2025 方祈安 · Scandi Portfolio</p>
     <div class="flex items-center gap-6">
-      <a href="assets/ScandiDesktopTidy_PLA_3h40m.gcode" download>
-         class="font-mono text-[8px] tracking-widest uppercase text-white/50 hover:text-white transition-colors border-b border-white/20 hover:border-white pb-px">
-        Download G-Code →
-      </a>
-      <a class="footer-email" href="mailto:scandifang@163.com">scandifang@163.com</a>
+      <a href="https://drive.google.com/file/d/16TkTUI6rz8xpN-BPgTzh4ANod65JtJB9/view?usp=drive_link" target="_blank" rel="noopener" class="font-mono text-[8px] tracking-widest uppercase text-white/50 hover:text-white transition-colors border-b border-white/20 hover:border-white pb-px">Download G-Code →</a>
+      <a href="mailto:scandifang@163.com" class="font-mono text-[8px] tracking-widest uppercase text-signal/60 hover:text-signal transition-colors">scandifang@163.com</a>
     </div>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+// Progress bar
 window.addEventListener('scroll', () => {
-  const pct = (window.scrollY/(document.documentElement.scrollHeight-window.innerHeight))*100;
-  document.getElementById('prog').style.width = pct+'%';
+  const pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+  document.getElementById('prog').style.width = pct + '%';
 });
-const obs = new Inters
+// Scroll reveal
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
 

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Archive · Scandi Fang</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&family=DM+Sans:ital,wght@0,200;0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:#F5F3EF;color:#111110;font-family:"DM Sans",sans-serif;overflow-x:hidden;}
+
+/* ── NAV ── */
+.nav-bar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:1.1rem 3rem;background:rgba(245,243,239,0.85);backdrop-filter:blur(18px);border-bottom:1px solid rgba(17,17,16,0.08);transition:background .3s;}
+.nav-logo{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#111110;text-decoration:none;}
+.nav-logo:hover{color:#0066FF;}
+.nav-right{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#A8A7A2;}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;min-height:600px;overflow:hidden;display:flex;align-items:flex-end;}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-attachment:fixed;transform:scale(1.08);will-change:transform;}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.08) 30%,rgba(0,0,0,0.55) 65%,rgba(0,0,0,0.88) 100%);}
+.hero-content{position:relative;z-index:2;width:100%;padding:0 7rem 5rem;display:grid;grid-template-columns:1fr 380px;gap:5rem;align-items:end;}
+.hero-text{}
+.hero-eyebrow{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:1.25rem;display:block;opacity:0;animation:fadeUp .8s .3s ease both;}
+.hero-title{font-family:"Bebas Neue",sans-serif;font-size:clamp(60px,8vw,110px);line-height:.92;color:#fff;margin-bottom:1.5rem;opacity:0;animation:fadeUp .9s .1s ease both;}
+.hero-sub{font-size:13px;font-weight:300;line-height:2;color:rgba(255,255,255,0.65);max-width:480px;opacity:0;animation:fadeUp .9s .5s ease both;}
+
+/* ── CARD CAROUSEL ── */
+.card-stack{position:relative;width:380px;height:260px;opacity:0;animation:fadeUp .9s .7s ease both;flex-shrink:0;}
+.card-stack-item{position:absolute;inset:0;border-radius:2px;overflow:hidden;cursor:pointer;transition:transform .6s cubic-bezier(0.4,0,0.2,1),opacity .6s ease,box-shadow .4s;}
+.card-stack-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease;}
+.card-stack-item:hover img{transform:scale(1.04);}
+.card-nav{position:absolute;bottom:-2rem;left:0;display:flex;gap:.5rem;z-index:10;}
+.card-dot{width:20px;height:2px;background:rgba(255,255,255,0.3);cursor:pointer;transition:background .3s,width .3s;}
+.card-dot.active{background:#fff;width:32px;}
+
+/* ── SECTION HEADER ── */
+.section-wrap{padding:7rem 7rem 5rem;}
+.series-header{position:relative;margin-bottom:4rem;}
+.series-num{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#0066FF;margin-bottom:1rem;display:block;}
+.series-title-zh{font-family:"Bebas Neue",sans-serif;font-size:clamp(52px,7vw,90px);line-height:.9;color:#111110;margin-bottom:.3rem;}
+.series-title-en{font-family:"Bebas Neue",sans-serif;font-size:clamp(22px,3vw,38px);line-height:1;color:#A8A7A2;margin-bottom:2rem;letter-spacing:.04em;}
+.series-quote{font-size:14px;font-weight:300;line-height:2.1;color:#6B6A66;max-width:680px;padding-left:1.5rem;border-left:2px solid #0066FF;}
+.series-count{position:absolute;right:0;top:0;font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.14em;color:#A8A7A2;}
+
+/* ── PARALLAX TITLE ── */
+.parallax-title{position:relative;overflow:hidden;padding:3rem 7rem;border-top:0.5px solid rgba(17,17,16,.1);border-bottom:0.5px solid rgba(17,17,16,.1);margin-bottom:0;}
+.parallax-inner{will-change:transform;}
+.parallax-big{font-family:"Bebas Neue",sans-serif;font-size:clamp(80px,12vw,160px);line-height:.85;color:rgba(17,17,16,.06);letter-spacing:.02em;white-space:nowrap;}
+
+/* ── MASONRY ── */
+.masonry-grid{padding:0 7rem 6rem;columns:3;column-gap:12px;}
+@media(max-width:900px){.masonry-grid{columns:2;padding:0 2rem 4rem;}}
+.masonry-item{break-inside:avoid;margin-bottom:12px;overflow:hidden;position:relative;cursor:pointer;}
+.masonry-item img{width:100%;display:block;object-fit:cover;transition:transform .55s cubic-bezier(0.4,0,0.2,1),filter .4s;filter:brightness(.97);}
+.masonry-item:hover img{transform:scale(1.03);filter:brightness(1.04);}
+.masonry-item .img-num{position:absolute;bottom:.5rem;right:.6rem;font-family:"Space Mono",monospace;font-size:8px;letter-spacing:.12em;color:rgba(255,255,255,0);transition:color .3s;}
+.masonry-item:hover .img-num{color:rgba(255,255,255,0.6);}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease;}
+.reveal.in{opacity:1;transform:translateY(0);}
+
+/* ── DIVIDER ── */
+.series-divider{height:1px;background:rgba(17,17,16,.08);margin:0 7rem;}
+
+/* ── LIGHTBOX ── */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,0);z-index:500;display:flex;align-items:center;justify-content:center;pointer-events:none;transition:background .35s;}
+.lightbox.open{background:rgba(0,0,0,0.96);pointer-events:all;}
+.lightbox-img{max-width:90vw;max-height:88vh;object-fit:contain;opacity:0;transform:scale(.96);transition:opacity .35s ease,transform .35s ease;border:none;}
+.lightbox.open .lightbox-img{opacity:1;transform:scale(1);}
+.lightbox-close{position:absolute;top:2rem;right:2.5rem;font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,0.5);cursor:pointer;transition:color .2s;}
+.lightbox-close:hover{color:#fff;}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.12em;color:rgba(255,255,255,0.4);cursor:pointer;padding:1rem;transition:color .2s;user-select:none;}
+.lightbox-nav:hover{color:#fff;}
+.lightbox-info{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);font-family:"Space Mono",monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+
+/* ── FOOTER ── */
+footer{background:#111110;padding:3rem 7rem;display:flex;justify-content:space-between;align-items:center;}
+.footer-logo{font-family:"Bebas Neue",sans-serif;font-size:42px;color:rgba(245,243,239,0.85);line-height:1;}
+.footer-right{text-align:right;}
+.footer-link{font-family:"Space Mono",monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:rgba(245,243,239,0.35);text-decoration:none;transition:color .2s;display:block;margin-bottom:.5rem;}
+.footer-link:hover{color:#0066FF;}
+.footer-copy{font-family:"Space Mono",monospace;font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,243,239,0.18);margin-top:.5rem;}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* typing cursor */
+.typing::after{content:'|';animation:blink .7s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-bar">
+  <a href="fangqian_landing_v10.html" class="nav-logo">← Scandi · Portfolio</a>
+  <span class="nav-right">Visual Archive · 方祈安</span>
+</nav>
+
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg" style="background-image:url('imgs/archive_64.webp')"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <span class="hero-eyebrow">Visual Archive · 2020 – 2025</span>
+      <h1 class="hero-title">SEEING<br>IS<br>FEELING.</h1>
+      <p class="hero-sub">
+        Photography, for me, is an extension of design thinking — a way of reading space, light, and human presence before putting pen to paper. These images were made across four continents and a dozen cities, but they all begin in the same place: a moment of stillness inside a moving world.<br><br>
+        三个系列，六十四帧。从成都的巷子到苏格兰的高地，从东京的霓虹到岳阳的老宅。这些照片记录的不是风景，而是我在其中的凝视与感受。
+      </p>
+    </div>
+
+    <!-- Card carousel -->
+    <div style="position:relative;">
+      <div class="card-stack" id="cardStack">
+        <div class="card-stack-item" data-index="0" style="transform:translateX(0) rotate(0deg) scale(1);z-index:5;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+          <img src="imgs/archive_59.webp" alt="">
+        </div>
+        <div class="card-stack-item" data-index="1" style="transform:translateX(12px) rotate(2deg) scale(0.96);z-index:4;box-shadow:0 15px 45px rgba(0,0,0,0.4);">
+          <img src="imgs/archive_60.webp" alt="">
+        </div>
+        <div class="card-stack-item" data-index="2" style="transform:translateX(22px) rotate(4deg) scale(0.93);z-index:3;box-shadow:0 10px 35px rgba(0,0,0,0.3);">
+          <img src="imgs/archive_61.webp" alt="">
+        </div>
+        <div class="card-stack-item" data-index="3" style="transform:translateX(30px) rotate(5.5deg) scale(0.9);z-index:2;box-shadow:0 8px 25px rgba(0,0,0,0.25);">
+          <img src="imgs/archive_62.webp" alt="">
+        </div>
+        <div class="card-stack-item" data-index="4" style="transform:translateX(36px) rotate(7deg) scale(0.87);z-index:1;box-shadow:0 6px 18px rgba(0,0,0,0.2);">
+          <img src="imgs/archive_63.webp" alt="">
+        </div>
+      </div>
+      <div class="card-nav" id="cardNav">
+        <div class="card-dot active" data-card="0"></div>
+        <div class="card-dot" data-card="1"></div>
+        <div class="card-dot" data-card="2"></div>
+        <div class="card-dot" data-card="3"></div>
+        <div class="card-dot" data-card="4"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SERIES 01: 市井交汇 ═══ -->
+<div class="section-wrap reveal">
+  <div class="series-header">
+    <span class="series-num">Series 01 · 27 frames</span>
+    <h2 class="series-title-zh">市井交汇</h2>
+    <p class="series-title-en">Urban Intersections</p>
+    <p class="series-quote">
+      Cities have always been my lens for understanding how culture takes physical form. This series was made across Chengdu, Tokyo, Osaka, Edinburgh, Baltimore, and Wakayama — each frame a fragment of what I found most irreducibly <em>local</em> about each place. The way a staircase turns in a Kyoto alley. The specific weight of Edinburgh's grey stone in morning mist. The colour of a Chengdu street-food cart at dusk. I am not interested in the postcard. I am interested in the moment just before someone notices the camera — when a city is still being itself.
+    </p>
+    <span class="series-count">01 / 03</span>
+  </div>
+</div>
+
+<div class="masonry-grid" id="grid1">
+</div>
+
+<div class="series-divider"></div>
+
+
+<!-- ═══ SERIES 02: 旷野造物 ═══ -->
+<div class="section-wrap reveal">
+  <div class="series-header">
+    <span class="series-num">Series 02 · 15 frames</span>
+    <h2 class="series-title-zh">旷野造物</h2>
+    <p class="series-title-en">Wilderness Made</p>
+    <p class="series-quote">
+      These photographs were made on foot — in the Scottish Highlands, along the Izu Peninsula, and on the slopes of Jade Dragon Snow Mountain. What drew me to each place was not scenery in the conventional sense, but the feeling of being in terrain that preceded human language entirely. The light on Glencoe at five in the morning. The particular silence of snow at 3,000 metres. The way Izu's coastline looks like it is still deciding what shape to be. Each image here is also an emotional self-portrait: I was not a neutral observer. The weather I photographed was, in some measure, the weather inside me.
+    </p>
+    <span class="series-count">02 / 03</span>
+  </div>
+</div>
+
+<div class="masonry-grid" id="grid2">
+</div>
+
+<div class="series-divider"></div>
+
+
+<!-- ═══ SERIES 03: 旧迹回响 ═══ -->
+<div class="section-wrap reveal">
+  <div class="series-header">
+    <span class="series-num">Series 03 · 16 frames</span>
+    <h2 class="series-title-zh">旧迹回响</h2>
+    <p class="series-title-en">Echoes of Home</p>
+    <p class="series-quote">
+      These photographs were made in Yueyang County, Hunan — the place I come from. They are portraits of old farmhouses, wooden tools, cracked courtyards, and objects that no longer have clear names in the mouths of my generation. I began making them because I wanted to understand how my grandparents lived: what they held, what they built, what they considered worth keeping. But I also made them out of a kind of grief. China's transformation in the last forty years has been so rapid that these things did not simply age — they were made obsolete almost overnight. This series is both an act of attention and an act of mourning.
+    </p>
+    <span class="series-count">03 / 03</span>
+  </div>
+</div>
+
+<div class="masonry-grid" id="grid3">
+</div>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Scandi</div>
+  <div class="footer-right">
+    <a href="fangqian_landing_v10.html" class="footer-link">← Back to Portfolio</a>
+    <a href="mailto:scandifang@163.com" class="footer-link">scandifang@163.com</a>
+    <p class="footer-copy">© 2025 方祈安 · All rights reserved</p>
+  </div>
+</footer>
+
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <img class="lightbox-img" id="lbImg" src="" alt="">
+  <span class="lightbox-info" id="lbInfo"></span>
+</div>
+
+
+<script>
+// ── BUILD MASONRY GRIDS ──
+const series = [
+  { id:'grid1', start:1, end:27, prefix:'archive_', pad:2 },
+  { id:'grid2', start:28, end:42, prefix:'archive_', pad:2 },
+  { id:'grid3', start:43, end:58, prefix:'archive_', pad:2 },
+];
+
+// Collect all images across all series for lightbox
+const allImages = [];
+
+series.forEach(s => {
+  const grid = document.getElementById(s.id);
+  for(let i = s.start; i <= s.end; i++){
+    const num = i.toString().padStart(2,'0');
+    const ext = 'webp';
+    const src = `imgs/${s.prefix}${num}.${ext}`;
+    allImages.push({ src, label:`${s.id.replace('grid','Series 0')} · ${num}` });
+    const item = document.createElement('div');
+    item.className = 'masonry-item reveal';
+    item.dataset.src = src;
+    item.dataset.idx = allImages.length - 1;
+    item.innerHTML = `<img src="${src}" alt="Photography ${num}" loading="lazy"><span class="img-num">${num}</span>`;
+    item.addEventListener('click', () => openLightbox(parseInt(item.dataset.idx)));
+    grid.appendChild(item);
+  }
+});
+
+// ── SCROLL REVEAL ──
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting){
+      setTimeout(() => {
+        e.target.classList.add('in');
+      }, (e.target.dataset.delay || 0));
+      revealObs.unobserve(e.target);
+    }
+  });
+}, { threshold:0.06, rootMargin:'0px 0px -30px 0px' });
+
+// Stagger masonry items
+document.querySelectorAll('.masonry-item').forEach((el, i) => {
+  el.dataset.delay = (i % 6) * 80;
+  revealObs.observe(el);
+});
+document.querySelectorAll('.reveal:not(.masonry-item)').forEach(el => revealObs.observe(el));
+
+// ── PARALLAX ──
+const parallaxEls = document.querySelectorAll('.parallax-inner');
+
+function updateParallax(){
+  const scrollY = window.scrollY;
+  parallaxEls.forEach(el => {
+    const speed = parseFloat(el.dataset.speed) || 0.3;
+    const parent = el.parentElement;
+    const rect = parent.getBoundingClientRect();
+    const offset = (window.innerHeight / 2 - rect.top - rect.height / 2);
+    el.style.transform = `translateY(${offset * speed * -1}px)`;
+  });
+}
+
+// ── HERO PARALLAX ──
+const heroBg = document.getElementById('heroBg');
+function updateHeroParallax(){
+  const scrollY = window.scrollY;
+  heroBg.style.transform = `scale(1.08) translateY(${scrollY * 0.25}px)`;
+}
+
+window.addEventListener('scroll', () => {
+  updateParallax();
+  updateHeroParallax();
+}, { passive: true });
+updateParallax();
+
+// ── CARD CAROUSEL ──
+const cards = document.querySelectorAll('.card-stack-item');
+const dots = document.querySelectorAll('.card-dot');
+let currentCard = 0;
+
+const cardPositions = [
+  { tx:0,  rot:0,   sc:1,    z:5, sh:'0 20px 60px rgba(0,0,0,0.5)' },
+  { tx:12, rot:2,   sc:0.96, z:4, sh:'0 15px 45px rgba(0,0,0,0.4)' },
+  { tx:22, rot:4,   sc:0.93, z:3, sh:'0 10px 35px rgba(0,0,0,0.3)' },
+  { tx:30, rot:5.5, sc:0.9,  z:2, sh:'0 8px 25px rgba(0,0,0,0.25)' },
+  { tx:36, rot:7,   sc:0.87, z:1, sh:'0 6px 18px rgba(0,0,0,0.2)' },
+];
+
+function applyCardPositions(active){
+  cards.forEach((card, i) => {
+    const pos = cardPositions[(i - active + cards.length) % cards.length];
+    card.style.transform = `translateX(${pos.tx}px) rotate(${pos.rot}deg) scale(${pos.sc})`;
+    card.style.zIndex = pos.z;
+    card.style.boxShadow = pos.sh;
+    card.style.transition = 'transform 0.55s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s';
+  });
+  dots.forEach((d,i) => d.classList.toggle('active', i === active));
+}
+
+cards.forEach((card, i) => {
+  card.addEventListener('click', () => {
+    currentCard = i;
+    applyCardPositions(currentCard);
+  });
+});
+dots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    currentCard = i;
+    applyCardPositions(currentCard);
+  });
+});
+
+// Auto-cycle cards
+setInterval(() => {
+  currentCard = (currentCard + 1) % cards.length;
+  applyCardPositions(currentCard);
+}, 3500);
+
+// ── LIGHTBOX ──
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbInfo = document.getElementById('lbInfo');
+let currentLb = 0;
+
+function openLightbox(idx){
+  currentLb = idx;
+  lbImg.src = allImages[idx].src;
+  lbInfo.textContent = allImages[idx].label + ' · ' + (idx+1) + ' / ' + allImages.length;
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(() => { lbImg.src = ''; }, 350);
+}
+function lbNavigate(dir){
+  currentLb = (currentLb + dir + allImages.length) % allImages.length;
+  lbImg.style.opacity = '0';
+  setTimeout(() => {
+    lbImg.src = allImages[currentLb].src;
+    lbInfo.textContent = allImages[currentLb].label + ' · ' + (currentLb+1) + ' / ' + allImages.length;
+    lbImg.style.opacity = '1';
+  }, 180);
+}
+
+document.getElementById('lbClose').addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if(!lightbox.classList.contains('open')) return;
+  if(e.key === 'ArrowLeft') lbNavigate(-1);
+  if(e.key === 'ArrowRight') lbNavigate(1);
+});
+// Swipe support
+let touchStartX = 0;
+lightbox.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; });
+lightbox.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if(Math.abs(dx) > 50) lbNavigate(dx < 0 ? 1 : -1);
+});
+</script>
+</body>
+</html>
